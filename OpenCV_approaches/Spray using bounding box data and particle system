@@ -1,0 +1,69 @@
+import numpy as np
+from PIL import Image
+from random import uniform
+
+# Load the image and bounding box data
+img = Image.open('C:/Ashok/Studies/Second Sem/SS23/Project/spray/WIP/Dry images/1a947cc8-1652945066312072152.png')
+bbox = (0.22884012539184959, 0.5805647840531563, 0.21107628004179738, 0.25747508305647854) # example bounding box data
+
+# Extract the car region from the image
+car = image.crop(bbox)
+
+left, top, right, bottom = 0.22884012539184959, 0.5805647840531563, 0.21107628004179738, 0.25747508305647854
+width, height = img.size
+left, top, right, bottom = left * width, top * height, right * width, bottom * height
+
+
+# Convert the car region to a NumPy array for further processing
+car = np.array(car)
+
+# Define the particle system parameters
+num_particles = 1000
+particle_size = 3
+particle_color = (255, 255, 255)
+particle_speed = 2
+particle_lifetime = 30
+
+# Define the particle system class
+class Particle:
+    def __init__(self, pos, vel):
+        self.pos = pos
+        self.vel = vel
+        self.age = 0
+    
+    def update(self):
+        self.pos[0] += self.vel[0]
+        self.pos[1] += self.vel[1]
+        self.age += 1
+    
+    def is_alive(self):
+        return self.age < particle_lifetime
+
+# Create the particle system
+particles = []
+for i in range(num_particles):
+    x = uniform(0, car.shape[1])
+    y = uniform(0, car.shape[0])
+    vx = uniform(-particle_speed, particle_speed)
+    vy = uniform(-particle_speed, particle_speed)
+    particles.append(Particle([x, y], [vx, vy]))
+
+# Simulate the particle system
+for t in range(particle_lifetime):
+    # Create a new image to hold the particles
+    particles_image = Image.new('RGB', car.shape[:2], (0, 0, 0))
+    
+    # Update and draw the particles
+    for p in particles:
+        p.update()
+        if p.is_alive():
+            x, y = int(p.pos[0]), int(p.pos[1])
+            particles_image.putpixel((x, y), particle_color)
+    
+    # Combine the particles image with the car image
+    particles_image = np.array(particles_image)
+    result = np.maximum(car, particles_image * particle_size)
+    
+    # Save the resulting image to a file
+    result = Image.fromarray(result)
+    result.save('result.jpg')
