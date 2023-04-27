@@ -1,0 +1,81 @@
+import cv2
+import numpy as np
+import random
+import pybboxes as pbx
+
+# Load the dry image
+dry_img = cv2.imread(r"D:\THI\IAE\SS23\Project\spray\spray_clear\images\1db12846-1652357280492155782.png")
+#print(dry_img)
+#k=np.shape(dry_img)
+#print(k)
+
+#converting YOLO to VOC
+yolo_normalized = (0.4550679205851619, 0.5838870431893686, 0.07836990595611269, 0.11129568106312285) 
+
+H, W = dry_img.shape[:2]
+
+box_voc = pbx.convert_bbox(yolo_normalized, from_type="yolo", to_type="voc", image_size=(W,H))
+print(box_voc)
+
+# Create an empty mask for the water spray
+spray_mask = np.zeros_like(dry_img)
+
+# Define the parameters for the particle system
+num_particles = 10000 # The number of particles to generate
+radius = 5 # The radius of each particle
+velocity = 20 # The initial velocity of each particle
+gravity = 0.2 # The strength of gravity
+wind = 0.1 # The strength of wind
+
+# Generate the particles
+for i in range(num_particles):
+    x = random.randint(0, dry_img.shape[1])
+    y = random.randint(0, dry_img.shape[0])
+    vx = random.uniform(-1, 1) * velocity
+    vy = random.uniform(-1, 0) * velocity
+    color = (255, 255, 255)
+    cv2.circle(spray_mask, (x, y), radius, color, -1)
+    spray_mask = cv2.blur(spray_mask, (radius, radius))
+    
+    # Simulate the motion of the particles
+    for j in range(10):
+        x += vx
+        y += vy
+        vy += gravity
+        vx += wind
+        if x < 0 or x > dry_img.shape[1] or y < 0 or y > dry_img.shape[0]:
+            break
+        cv2.circle(spray_mask, (int(x), int(y)), radius, color, -1)
+        spray_mask = cv2.blur(spray_mask, (radius, radius))
+
+
+# Generate a mask of the car
+# Replace this with your YOLO bounding box information
+car_mask = np.zeros_like(dry_img)
+car_mask[68:270, 53:217, :] = 255
+
+# Resize the spray mask to match the size of the car mask
+spray_mask = cv2.resize(spray_mask, (car_mask.shape[1], car_mask.shape[0]))
+
+# Overlay the spray mask over the car mask
+overlay = np.zeros_like(car_mask)
+overlay[..., 0] = spray_mask[..., 0]
+overlay[..., 1] = spray_mask[..., 1]
+overlay[..., 2] = spray_mask[..., 2]
+overlay = overlay.astype(np.float32) / 255.0
+overlay = overlay * spray_mask[..., 2:] / 255.0
+overlay = overlay * 0.8 # Adjust the opacity of the spray
+
+# Apply the spray mask to the original image
+result = dry_img.astype(np.float32) * (1 - overlay)
+result = result + overlay * 255.0
+result = result.astype(np.uint8)
+
+# Display the result
+cv2.imshow('Result', result)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#save the image locally
+#cv2.imwrite(r'D:\THI\IAE\SS23\Project\Trials\stochastic model bounding box\1db12846-1652357280492155782.png',result)
+#print("Image written to file-system : ",status)
