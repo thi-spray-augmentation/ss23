@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# PicsFelix
+01_CycleGAN/F/images_dry/
+01_CycleGAN/F/images_dry/
