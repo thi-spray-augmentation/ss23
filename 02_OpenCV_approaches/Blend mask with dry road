@@ -31,3 +31,4 @@ cv2.destroyAllWindows()
 
 output_path = ''C:/Ashok/Studies/Second Sem/SS23/Project/spray/spray_clear/Training/test_Output_img.png'
 cv2.imwrite(output_path, img)
+

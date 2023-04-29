@@ -1,0 +1,34 @@
+import cv2
+import numpy as np
+
+# Load the dry image and spray image
+dry_image = cv2.imread(r"D:\THI\IAE\SS23\Project\spray\spray_clear\images\1db12846-1652357280492155782.png")
+spray_image = cv2.imread(r"C:\Users\amanr\Desktop\ll.png", cv2.IMREAD_UNCHANGED)
+
+# Define the location to overlay the spray image
+x, y, width, height = 169, 135, 201, 164
+dimension = (width, height)
+# Resize the spray image to match the size of the dry image
+spray_image = cv2.resize(spray_image, dimension)
+
+# Extract the alpha channel of the spray image
+alpha = spray_image[:,:,3] / 255.0
+alpha = alpha.astype(np.float64)
+#alpha= double(alpha)
+print(type(alpha))
+shape(alpha)
+
+# Create a mask from the alpha channel
+mask = np.zeros((height, width), dtype=np.uint8)
+mask[alpha > 0] = 255
+
+# Overlay the spray image on top of the dry image
+dry_image_roi = dry_image[y:y+height, x:x+width]
+blended_image = cv2.addWeighted(dry_image_roi, 1.0-alpha, spray_image[:,:,:3], alpha, 0)
+
+dry_image[y:y+height, x:x+width] = blended_image
+
+# Show the result
+cv2.imshow('Sprayed Image', dry_image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()

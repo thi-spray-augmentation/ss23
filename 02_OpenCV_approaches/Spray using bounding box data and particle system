@@ -67,3 +67,5 @@ for t in range(particle_lifetime):
     # Save the resulting image to a file
     result = Image.fromarray(result)
     result.save('result.jpg')
+    
+    
