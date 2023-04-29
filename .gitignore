@@ -128,6 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# PicsFelix
+# IgnoreFelix
 01_CycleGAN/F/images_dry/
 01_CycleGAN/F/images_wet/
+01_CycleGAN/F/.idea/
+01_CycleGAN/F/__pycache__/

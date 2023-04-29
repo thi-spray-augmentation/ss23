@@ -88,7 +88,7 @@ def train_fn(
         g_scaler.step(opt_gen)
         g_scaler.update()
 
-        if idx % 200 == 0:
+        if idx % 1 == 0:
             save_image(fake_dry * 0.5 + 0.5, f"saved_images/dry_{idx}.png")
             save_image(fake_wet * 0.5 + 0.5, f"saved_images/wet_{idx}.png")
 
