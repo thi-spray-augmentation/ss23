@@ -1,5 +1,7 @@
 # CycleGAN
 
+Paper: https://junyanz.github.io/CycleGAN/
+
 Implemented like in the tutorial on https://www.youtube.com/watch?v=4LktBHGCNfw&list=PLhhyoLH6IjfwIp8bZnzX8QR30TRcHO8Va&index=9
 
 ## Results
