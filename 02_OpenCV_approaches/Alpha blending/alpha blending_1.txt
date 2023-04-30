@@ -1,0 +1,52 @@
+import cv2
+import numpy as np
+
+# Load the dry image and spray image
+dry_image = cv2.imread(r"D:\THI\IAE\SS23\Project\spray\spray_clear\images\1db12846-1652357280492155782.png")
+spray_image = cv2.imread(r"C:\Users\amanr\Desktop\ll.png", cv2.IMREAD_UNCHANGED)
+[img_x, img_y, channel] = np.shape(dry_image)
+
+# Define the location to overlay the spray image
+x_center, y_center, width_ratio, height_ratio = 182, 220, 0.25, 0.5
+x = int(x_center)
+y = int(y_center)
+width = int(width_ratio * img_y)
+height = int(height_ratio * img_x)
+
+dimension = (width, height)
+
+# Resize the spray image to match the size of the bounding box
+spray_image = cv2.resize(spray_image, dimension)
+
+# Extract the alpha channel of the spray image
+alpha = spray_image[:, :, 3] / 255.0
+
+# Overlay the spray image on top of the dry image
+dry_image_roi = dry_image[0:img_x, 0:img_y]
+
+blended_image = np.copy(dry_image_roi)
+
+for i in range(y - int(height / 2), y + int(height / 2)):
+    for j in range(x - int(width / 2), x + int(width / 2)):
+        if i >= img_x or j >= img_y:
+            continue
+
+        alpha_val = alpha[i - int(y + height / 2), j - int(x + width / 2)]
+        # Decrease alpha value to add opacity
+        alpha_val *= 0.5
+        blended_pixel = cv2.addWeighted(dry_image_roi[i, j], 1.0 - alpha_val,
+                                        spray_image[i - int(y + height / 2), j - int(x + width / 2), :3], alpha_val, 0)
+        blended_image[i, j] = blended_pixel.squeeze()
+
+dry_image[y - int(height / 2):y + int(height / 2), x - int(width / 2): x + int(width / 2)] = blended_image[y - int(height / 2):y + int(height / 2), x - int(width / 2): x + int(width / 2)]
+                                                                                                     
+                                                                                                     
+
+# Show the result
+cv2.imshow('Sprayed Image', dry_image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+# Save the image locally
+# cv2.imwrite(r'D:\THI\IAE\SS23\Project\Trials\stochastic model bounding box\1db12846-1652357280492155782.png',result)
+# print("Image written to file-system : ",status)
