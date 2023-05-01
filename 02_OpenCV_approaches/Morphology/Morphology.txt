@@ -1,0 +1,41 @@
+import cv2
+
+# Load the car image
+img = cv2.imread('C:/Ashok/Studies/Second Sem/SS23/Project/spray/WIP/Dry images/8c141353-1652772811987309321.png')
+
+# Apply the water spray effect
+kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (10, 10))
+sprays = cv2.morphologyEx(img, cv2.MORPH_TOPHAT, kernel)
+
+# Show the result
+cv2.imshow('Water Sprays', sprays)
+cv2.waitKey()
+cv2.destroyAllWindows()
+
+
+
+
+to increase the brightness
+
+
+
+import cv2
+import numpy as np
+
+
+# Load the car image
+img = cv2.imread('C:/Ashok/Studies/Second Sem/SS23/Project/spray/WIP/Dry images/1e04f00e-1652863047784870735.png')
+
+# Apply the water spray effect
+kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (10, 10))
+sprays = cv2.morphologyEx(img, cv2.MORPH_TOPHAT, kernel)
+
+# Increase brightness of the image
+alpha = 1.0  # Brightness control (1.0-3.0)
+beta = 50  # Contrast control (0-100)
+brightened = cv2.addWeighted(sprays, alpha, np.zeros_like(img), 0, beta)
+
+# Show the result
+cv2.imshow('Water Sprays', brightened)
+cv2.waitKey()
+cv2.destroyAllWindows()
