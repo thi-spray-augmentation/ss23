@@ -1,0 +1,33 @@
+import cv2
+import numpy as np
+
+# Load images
+dry_road = cv2.imread('C:/Ashok/Studies/Second Sem/SS23/Project/spray/spray_clear/Training/test/1d5deabf-1652786908575029738- dry road.png')
+wet_road = cv2.imread('C:/Ashok/Studies/Second Sem/SS23/Project/spray/spray_clear/Training/test/0a3bade0-1653032554607306154- wet road.png')
+
+# Convert images into grayscale
+gray_dry_road = cv2.cvtColor(dry_road, cv2.COLOR_BGR2GRAY)
+gray_wet_road = cv2.cvtColor(wet_road, cv2.COLOR_BGR2GRAY)
+
+# Subtract grayscale wet road from grayscale dry road
+diff = cv2.absdiff(gray_dry_road, gray_wet_road)
+
+# Apply threshold on resulting image
+_, thresh = cv2.threshold(diff, 50, 255, cv2.THRESH_BINARY)
+
+# Apply Gaussian blur on resulting image
+blur = cv2.GaussianBlur(thresh, (51, 51), 0)
+
+# Convert resulting image back into color
+mask = cv2.cvtColor(blur, cv2.COLOR_GRAY2BGR)
+
+# Blend mask with dry road image
+result = cv2.addWeighted(dry_road, 1, mask, 0.5, 0)
+
+cv2.imshow('Result', result)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+
+output_path = ''C:/Ashok/Studies/Second Sem/SS23/Project/spray/spray_clear/Training/test_Output_img.png'
+>>> cv2.imwrite(output_path, img)

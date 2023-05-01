@@ -1,0 +1,26 @@
+import cv2
+
+# Read both images
+spray_img = cv2.imread('C:/Ashok/Studies/Second Sem/SS23/Project/spray/spray_clear/Training/test/0a3bade0-1653032554607306154- wet road.png')
+car_img = cv2.imread('C:/Ashok/Studies/Second Sem/SS23/Project/spray/spray_clear/Training/test/1d5deabf-1652786908575029738- dry road.png')
+
+# Convert both images to grayscale
+spray_gray = cv2.cvtColor(spray_img, cv2.COLOR_BGR2GRAY)
+car_gray = cv2.cvtColor(car_img, cv2.COLOR_BGR2GRAY)
+
+# Create binary mask of spray image
+_, spray_mask = cv2.threshold(spray_gray, 200, 255, cv2.THRESH_BINARY)
+
+# Invert binary mask
+spray_mask_inv = cv2.bitwise_not(spray_mask)
+
+# Apply inverted binary mask to car image
+car_masked = cv2.bitwise_and(car_img, car_img, mask=spray_mask_inv)
+
+# Combine masked car image with original spray image
+result = cv2.bitwise_or(car_masked, spray_img)
+
+# Display result
+cv2.imshow('Result', result)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
