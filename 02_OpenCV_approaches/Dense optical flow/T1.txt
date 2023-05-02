@@ -1,0 +1,48 @@
+import cv2
+import numpy as np
+
+# Load the input image
+img = cv2.imread('C:/Users/guash/OneDrive/Desktop/Project/02-05-23/0a0fe905-1652339429711892445.png')
+
+# Convert the image to grayscale
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+# Apply Gaussian blur to the grayscale image
+blur = cv2.GaussianBlur(gray, (5, 5), 0)
+
+# Define the density and direction of the water spray effect
+density = 50  # Range: 0 to 100
+direction = 45  # Range: 0 to 360
+
+# Calculate the x and y components of the flow vector
+angle = np.deg2rad(direction)
+flow_x = density * np.cos(angle)
+flow_y = density * np.sin(angle)
+
+
+# Create the flow vector
+h, w = gray.shape
+flow = np.zeros((h, w, 2), dtype=np.float32)
+for y in range(h):
+    for x in range(w):
+        flow[y, x] = np.array([flow_x, flow_y])
+
+
+# Apply the dense optical flow to the blurred image
+flow = cv2.dilate(flow, None)
+flow = cv2.normalize(flow, None, 0, 255, cv2.NORM_MINMAX)
+flow = np.uint8(flow)
+
+
+flow_resized = cv2.resize(flow, (w, h))
+result = cv2.addWeighted(blur, 0.5, flow_resized, 0.5, 0)
+cv2.imshow('Spray Effect', result)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+cv2.imwrite('C:/Users/guash/OneDrive/Desktop/Project/02-05-23/wet_road_car.png', result)
+
+
+
+
+

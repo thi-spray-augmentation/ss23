@@ -1,0 +1,57 @@
+import cv2
+import numpy as np
+
+# Load the input image
+img = cv2.imread('C:/Users/guash/OneDrive/Desktop/Project/02-05-23/0ba9f0df-1652772811777105808.png')
+
+# Convert the image to grayscale
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+# Apply Gaussian blur to the grayscale image
+blur = cv2.GaussianBlur(gray, (5, 5), 0)
+
+# Define the density and direction of the water spray effect
+density = 50  # Range: 0 to 100
+direction = 45  # Range: 0 to 360
+
+# Calculate the x and y components of the flow vector
+angle = np.deg2rad(direction)
+flow_x = density * np.cos(angle)
+flow_y = density * np.sin(angle)
+
+# Create the flow vector
+h, w = gray.shape[:2]
+
+flow = np.zeros((h, w, 2), dtype=np.float32)
+for y in range(h):
+    for x in range(w):
+        flow[y, x] = np.array([flow_x, flow_y])
+
+# Apply the dense optical flow to the blurred image
+flow = cv2.dilate(flow, None)
+flow = cv2.normalize(flow, None, 0, 255, cv2.NORM_MINMAX)
+flow = np.uint8(flow)
+
+# Resize the flow vector to the size of the input image
+flow_resized = cv2.resize(flow, (img.shape[1], img.shape[0]))
+
+# Convert the blurred image to a 3-channel BGR image
+blur_3ch = cv2.cvtColor(blur, cv2.COLOR_GRAY2BGR)
+
+# Combine the blurred image and the flow vector using weighted addition
+result = cv2.addWeighted(blur_3ch, 0.5, flow_resized, 0.8, 0)
+
+flow_resized_3ch = cv2.merge([flow_resized, np.zeros_like(flow_resized[:,:,0])])
+result = cv2.addWeighted(blur_3ch, 0.5, flow_resized_3ch, 0.8, 0)
+
+
+# Adjust brightness and contrast of the image
+alpha = 2.5  # Contrast control (1.0-3.0)
+beta = 75  # Brightness control (0-100)
+result = cv2.convertScaleAbs(result, alpha=alpha, beta=beta)
+
+# Show the result and save it
+cv2.imshow('Spray Effect', result)
+cv2.imwrite('C:/Users/guash/OneDrive/Desktop/Project/02-05-23/wet_road_car.png', result)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
