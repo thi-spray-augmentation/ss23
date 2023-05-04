@@ -1,0 +1,7 @@
+1. clone Repo: git clone <link>
+2. git checkout -b <Name>
+3. change your code and add Stuff
+4. Add changes: git add -A
+5. commit your changes: git commit -m <Commit message>
+6. git push -> the right command shoud come up
+7. Pull request and Merge on Github Webside
