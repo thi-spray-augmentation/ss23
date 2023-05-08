@@ -1,0 +1,15 @@
+Using 1 target image
+
+
+Parameters:
+-----------
+
+texts: a passenger car creating spray
+width: default
+height: default
+model: vqgan_imagenet_f16_16384
+images_interval: 10
+init_image: /content/03_1a947cc8-1652945066312072152.png
+target_images: /content/03_0a860de1-1652691506759178501.png
+seed: -1
+max_iterations: -1
