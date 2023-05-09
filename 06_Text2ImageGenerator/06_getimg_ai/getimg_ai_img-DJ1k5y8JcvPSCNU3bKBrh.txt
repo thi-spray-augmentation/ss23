@@ -1,0 +1,19 @@
+add wetness to roadsurface and rain and spray
+
+Size:
+512 × 512
+
+Guidance scale:
+9
+
+Image guidance:
+2
+
+Steps:
+25
+
+Model:
+Instruct Pix2Pix
+
+Created:
+May 4, 2023 5:39 PM
