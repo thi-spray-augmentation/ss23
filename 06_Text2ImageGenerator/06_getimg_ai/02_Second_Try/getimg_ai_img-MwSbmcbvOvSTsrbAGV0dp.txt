@@ -1,0 +1,19 @@
+generate dense fog in the lower third of the image
+
+Size:
+512 × 512
+
+Guidance scale:
+12
+
+Image guidance:
+2
+
+Steps:
+25
+
+Model:
+Instruct Pix2Pix
+
+Created:
+May 10, 2023 3:59 PM
