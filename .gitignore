@@ -129,7 +129,7 @@ dmypy.json
 .pyre/
 
 # IgnoreFelix
-01_CycleGAN/F/images_dry/
-01_CycleGAN/F/images_wet/
-01_CycleGAN/F/.idea/
-01_CycleGAN/F/__pycache__/
+01_CycleGAN/Felix/images_dry/
+01_CycleGAN/Felix/images_wet/
+01_CycleGAN/Felix/.idea/
+01_CycleGAN/Felix/__pycache__/
