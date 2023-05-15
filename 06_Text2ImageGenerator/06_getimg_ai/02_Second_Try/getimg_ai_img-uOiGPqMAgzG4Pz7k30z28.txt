@@ -1,0 +1,19 @@
+Generate dense fog on the street surface and make the street surface looking wet including spray
+
+Size:
+512 × 512
+
+Guidance scale:
+12
+
+Image guidance:
+2
+
+Steps:
+25
+
+Model:
+Instruct Pix2Pix
+
+Created:
+May 10, 2023 4:23 PM
