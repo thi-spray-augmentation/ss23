@@ -1,0 +1,22 @@
+generate a diffuse spray cloud without background
+
+Size:
+512 × 512
+
+Guidance scale:
+12
+
+Steps:
+25
+
+Seed:
+868047398
+
+Diffusion sampler:
+DPM-Solver++
+
+Model:
+Realistic Vision
+
+Created:
+May 10, 2023 3:53 PM
