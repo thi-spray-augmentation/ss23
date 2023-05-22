@@ -133,3 +133,6 @@ dmypy.json
 01_CycleGAN/Felix/images_wet/
 01_CycleGAN/Felix/.idea/
 01_CycleGAN/Felix/__pycache__/
+
+# Ignore Lennart
+
