@@ -135,4 +135,4 @@ dmypy.json
 01_CycleGAN/Felix/__pycache__/
 
 # Ignore Lennart
-
+01_CycleGAN/Lennart/Data/
